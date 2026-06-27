@@ -420,7 +420,7 @@
                 </div>
 
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
-                    <div class="max-w-full max-h-[550px] overflow-auto custom-scrollbar">
+                    <div class="max-w-full overflow-auto custom-scrollbar" style="max-height: 450px;">
                         <table class="w-full min-w-[800px] border-collapse text-left">
                             <thead class="sticky top-0 z-10">
                                 <tr class="border-b border-gray-200 dark:border-gray-800">
