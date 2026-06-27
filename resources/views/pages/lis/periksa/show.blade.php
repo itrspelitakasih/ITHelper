@@ -431,6 +431,7 @@
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Hasil</th>
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Satuan</th>
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Nilai Rujukan</th>
+                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Tanda</th>
                                     @if($model->validasi == 0)
                                         <th class="px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-16">Aksi</th>
                                     @endif
@@ -539,6 +540,16 @@
                                                     <td class="px-4 py-3 text-sm text-gray-650 dark:text-gray-300 font-mono">
                                                         {{ $row->normal_range ?: '-' }}
                                                     </td>
+                                                    <td class="px-4 py-3">
+                                                        <select @change="updateGeneric('{{ route('lis.result.tanda') }}', { id: {{ $row->id }}, value: $event.target.value })"
+                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
+                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-1 text-center text-xs font-semibold text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                                                            <option value="" class="dark:bg-gray-950" {{ $row->tanda == '' ? 'selected' : '' }}>-</option>
+                                                            <option value="L" class="dark:bg-gray-950" {{ $row->tanda == 'L' ? 'selected' : '' }}>L</option>
+                                                            <option value="H" class="dark:bg-gray-950" {{ $row->tanda == 'H' ? 'selected' : '' }}>H</option>
+                                                            <option value="#" class="dark:bg-gray-950" {{ $row->tanda == '#' ? 'selected' : '' }}>#</option>
+                                                        </select>
+                                                    </td>
                                                     @if($model->validasi == 0)
                                                         <td class="px-4 py-3 text-center">
                                                             <button type="button" @click="deleteRow({{ $row->id }}, $event.target)"
@@ -553,7 +564,7 @@
                                     @endforeach
                                 @empty
                                     <tr>
-                                        <td colspan="{{ $model->validasi == 0 ? 6 : 4 }}" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        <td colspan="{{ $model->validasi == 0 ? 7 : 5 }}" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                             Belum ada parameter pemeriksaan. Tambahkan parameter menggunakan tombol di atas.
                                         </td>
                                     </tr>
