@@ -45,7 +45,7 @@ class MenuHelper
                 'name' => 'Pemeriksaan Penunjang',
                 'subItems' => [
                     ['name' => 'Laboratorium (SIMRS)', 'path' => '/laboratorium/permintaan', 'activePath' => '/laboratorium/permintaan*|/laboratorium/periksa*', 'permission' => 'laboratorium.view'],
-                    ['name' => 'Laboratorium (LIS)', 'path' => '/lis/periksa', 'activePath' => '/lis*|/laboratorium/simrs*', 'permission' => 'laboratorium.view'],
+                    ['name' => 'Laboratorium (LIS)', 'path' => '/lis/periksa-simrs', 'activePath' => '/lis*|/laboratorium/simrs*', 'permission' => 'laboratorium.view'],
                 ],
             ],
         ];
