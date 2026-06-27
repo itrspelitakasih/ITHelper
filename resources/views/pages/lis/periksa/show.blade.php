@@ -422,18 +422,18 @@
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
                     <div class="max-w-full max-h-[550px] overflow-auto custom-scrollbar">
                         <table class="w-full min-w-[800px] border-collapse text-left">
-                            <thead class="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800">
+                            <thead class="sticky top-0 z-10">
                                 <tr class="border-b border-gray-200 dark:border-gray-800">
                                     @if($model->validasi == 0)
-                                        <th class="px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-10">P</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-10">P</th>
                                     @endif
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500">Pemeriksaan</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Hasil</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Satuan</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Nilai Rujukan</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Tanda</th>
+                                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs font-medium uppercase text-gray-500">Pemeriksaan</th>
+                                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Hasil</th>
+                                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Satuan</th>
+                                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Nilai Rujukan</th>
+                                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Tanda</th>
                                     @if($model->validasi == 0)
-                                        <th class="px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-16">Aksi</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-16">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>
