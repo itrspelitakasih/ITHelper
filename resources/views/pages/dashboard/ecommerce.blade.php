@@ -23,7 +23,7 @@
                 <label><span class="form-label">Sampai Tanggal</span><input type="date" name="to" value="{{ $filters['to'] }}" class="form-control"></label>
                 <div class="flex items-end gap-2">
                     <button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white">Terapkan</button>
-                    <a href="{{ route('dashboard') }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700">Reset</a>
+                    <a href="{{ route('dashboard') }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Reset</a>
                 </div>
             </form>
         </div>
@@ -67,7 +67,7 @@
                                 <td class="px-5 py-4 text-sm font-medium text-success-600">{{ number_format($item['sent_count']) }}</td>
                                 <td class="px-5 py-4 text-sm font-medium text-warning-600">{{ number_format($item['pending']) }}</td>
                                 <td class="px-5 py-4"><div class="w-40"><div class="h-2 rounded-full bg-gray-100 dark:bg-gray-800"><div class="h-2 rounded-full bg-brand-500" style="width: {{ $percentage }}%"></div></div><span class="mt-1 block text-xs text-gray-400">{{ $percentage }}% terkirim</span></div></td>
-                                <td class="px-5 py-4"><a href="{{ url($item['path']) }}" class="inline-flex rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium dark:border-gray-700">Buka Menu</a></td>
+                                <td class="px-5 py-4"><a href="{{ url($item['path']) }}" class="inline-flex rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Buka Menu</a></td>
                             </tr>
                         @endforeach
                     </tbody>

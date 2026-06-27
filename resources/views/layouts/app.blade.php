@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Dashboard' }} | TailAdmin - Laravel Tailwind CSS Admin Dashboard Template</title>
+    <title>{{ $title ?? 'Dashboard' }} | {{ $appName }}</title>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -49,6 +49,7 @@
                 isExpanded: window.innerWidth >= 1280, // true for desktop, false for mobile
                 isMobileOpen: false,
                 isHovered: false,
+                surpriseOpen: false,
 
                 toggleExpanded() {
                     this.isExpanded = !this.isExpanded;
@@ -115,7 +116,7 @@
         @include('layouts.backdrop')
         @include('layouts.sidebar')
 
-        <div class="flex-1 transition-all duration-300 ease-in-out"
+        <div class="min-w-0 flex-1 transition-all duration-300 ease-in-out"
             :class="{
                 'xl:ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'xl:ml-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
@@ -124,15 +125,90 @@
             <!-- app header start -->
             @include('layouts.app-header')
             <!-- app header end -->
-            <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            <div class="w-full min-w-0 p-4 md:p-6">
                 @yield('content')
             </div>
         </div>
 
     </div>
 
+    @include('layouts.donation-modal')
 </body>
 
 @stack('scripts')
+
+<script>
+/**
+ * Global Date Filter Converter
+ * Converts all input[type="date"] with name="from" or name="to"
+ * from browser-locale MM/DD/YYYY display to Indonesian DD/MM/YYYY format.
+ * Server always receives YYYY-MM-DD via a hidden input.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    function toDisplay(ymd) {
+        if (!ymd || !/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return '';
+        const [y, m, d] = ymd.split('-');
+        return d + '/' + m + '/' + y;
+    }
+
+    function toYMD(dmy) {
+        if (!dmy) return '';
+        const parts = dmy.split('/');
+        if (parts.length === 3 && parts[2].length === 4) {
+            return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+        }
+        return '';
+    }
+
+    const selectors = [
+        'input[type="date"][name="from"]',
+        'input[type="date"][name="to"]',
+        'input[type="date"][name="tanggal"][form]',
+    ];
+
+    document.querySelectorAll(selectors.join(', ')).forEach(function (dateInput) {
+        const originalName  = dateInput.name;
+        const originalValue = dateInput.value;       // YYYY-MM-DD
+        const originalClass = dateInput.getAttribute('class') || '';
+
+        // Text input for display (DD/MM/YYYY)
+        const textInput = document.createElement('input');
+        textInput.type        = 'text';
+        textInput.value       = toDisplay(originalValue);
+        textInput.placeholder = 'TT/BB/TTTT';
+        textInput.setAttribute('class', originalClass);
+        textInput.setAttribute('autocomplete', 'off');
+        // Copy any data-* or id attributes
+        if (dateInput.id) textInput.id = dateInput.id;
+
+        // Hidden input carries the real YYYY-MM-DD value
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type  = 'hidden';
+        hiddenInput.name  = originalName;
+        hiddenInput.value = originalValue;
+
+        // Sync text → hidden on every keystroke
+        textInput.addEventListener('input', function () {
+            hiddenInput.value = toYMD(this.value) || this.value;
+        });
+
+        // Auto-format after blur: normalize partial entries
+        textInput.addEventListener('blur', function () {
+            const ymd = toYMD(this.value);
+            if (ymd) {
+                this.value = toDisplay(ymd);
+                hiddenInput.value = ymd;
+            }
+        });
+
+        // Remove name from original so it doesn't submit twice
+        dateInput.removeAttribute('name');
+        dateInput.style.display = 'none';
+
+        dateInput.parentNode.insertBefore(textInput, dateInput);
+        dateInput.parentNode.insertBefore(hiddenInput, dateInput);
+    });
+});
+</script>
 
 </html>

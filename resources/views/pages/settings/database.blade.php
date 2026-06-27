@@ -63,6 +63,63 @@
             </label>
 
             <div class="border-t border-gray-200 pt-5 dark:border-gray-800 md:col-span-2">
+                <h3 class="font-medium text-gray-800 dark:text-white/90">Aplikasi LIS</h3>
+                <p class="mt-1 text-xs text-gray-500">Kebutuhan integrasi dengan Laboratory Information System.</p>
+            </div>
+            <label class="block md:col-span-2">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS URL</span>
+                <input type="url" name="lis_url" value="{{ $input('lis_url', 'http://localhost/lis') }}" class="form-control" placeholder="http://localhost/lis">
+                @error('lis_url')
+                    <p class="mt-1.5 text-sm text-error-500">{{ $message }}</p>
+                @enderror
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS DB Host</span>
+                <input name="lis_db_host" value="{{ $input('lis_db_host') }}" class="form-control" placeholder="e.g. 127.0.0.1">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS DB Port</span>
+                <input type="number" name="lis_db_port" value="{{ $input('lis_db_port', 3306) }}" class="form-control">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS DB Database Name</span>
+                <input name="lis_db_database" value="{{ $input('lis_db_database') }}" class="form-control" placeholder="e.g. lisypm">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS DB Username</span>
+                <input name="lis_db_username" value="{{ $input('lis_db_username') }}" class="form-control" placeholder="e.g. root">
+            </label>
+            <label class="block md:col-span-2">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">LIS DB Password</span>
+                <input type="password" name="lis_db_password" class="form-control" placeholder="{{ $setting?->lis_db_password ? 'Kosongkan untuk mempertahankan password LIS lama' : '' }}">
+            </label>
+
+            <div class="border-t border-gray-200 pt-5 dark:border-gray-800 md:col-span-2">
+                <h3 class="font-medium text-gray-800 dark:text-white/90">LIS Database Antara / Bridging</h3>
+                <p class="mt-1 text-xs text-gray-500">Kredensial database bridging LIS (misal: sik_bridging_lab). Kosongkan jika menggunakan database SIMRS utama.</p>
+            </div>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Antara DB Host</span>
+                <input name="lis_antara_db_host" value="{{ $input('lis_antara_db_host') }}" class="form-control" placeholder="e.g. 127.0.0.1">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Antara DB Port</span>
+                <input type="number" name="lis_antara_db_port" value="{{ $input('lis_antara_db_port', 3306) }}" class="form-control">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Antara DB Database Name</span>
+                <input name="lis_antara_db_database" value="{{ $input('lis_antara_db_database') }}" class="form-control" placeholder="e.g. sik_bridging_lab">
+            </label>
+            <label class="block">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Antara DB Username</span>
+                <input name="lis_antara_db_username" value="{{ $input('lis_antara_db_username') }}" class="form-control" placeholder="e.g. root">
+            </label>
+            <label class="block md:col-span-2">
+                <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Antara DB Password</span>
+                <input type="password" name="lis_antara_db_password" class="form-control" placeholder="{{ $setting?->lis_antara_db_password ? 'Kosongkan untuk mempertahankan password Antara lama' : '' }}">
+            </label>
+
+            <div class="border-t border-gray-200 pt-5 dark:border-gray-800 md:col-span-2">
                 <h3 class="font-medium text-gray-800 dark:text-white/90">API SATUSEHAT</h3>
                 <p class="mt-1 text-xs text-gray-500">Diperlukan untuk tombol kirim Encounter. Client ID dan Client Secret disimpan terenkripsi.</p>
             </div>

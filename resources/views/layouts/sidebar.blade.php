@@ -47,10 +47,13 @@
         },
         isActive(path) {
             const current = window.location.pathname;
-            if (path.endsWith('*')) {
-                return current.startsWith(path.slice(0, -1));
-            }
-            return current === path || '{{ $currentPath }}' === path.replace(/^\//, '');
+            const paths = path.split('|');
+            return paths.some(p => {
+                if (p.endsWith('*')) {
+                    return current.startsWith(p.slice(0, -1));
+                }
+                return current === p || '{{ $currentPath }}' === p.replace(/^\//, '');
+            });
         }
     }"
     :class="{
@@ -66,15 +69,20 @@
         :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
         'xl:justify-center' :
         'justify-start'">
-        <a href="/">
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width="150" height="40" />
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width="150"
-                height="40" />
-            <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
-
+        <a href="/" class="flex min-w-0 items-center gap-3">
+            @if ($appLogoUrl)
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg">
+                    <img src="{{ $appLogoUrl }}" alt="{{ $appName }}" class="max-h-9 max-w-9 object-contain" style="max-width: 36px; max-height: 36px;">
+                </span>
+            @else
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-sm font-semibold text-white">
+                    {{ strtoupper(mb_substr($appName, 0, 1)) }}
+                </span>
+            @endif
+            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                class="truncate text-lg font-semibold text-gray-900 dark:text-white">
+                {{ $appName }}
+            </span>
         </a>
     </div>
 

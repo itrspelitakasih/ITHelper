@@ -10,7 +10,7 @@
                             Masuk
                         </h1>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Masukkan email dan password untuk mengakses SIMRS Portal.
+                            Masukkan email dan password untuk mengakses {{ $appName }}.
                         </p>
                     </div>
 
@@ -67,7 +67,7 @@
                     </form>
 
                     <p class="mt-5 text-center text-sm font-normal text-gray-500 sm:text-start dark:text-gray-400">
-                        Akun dikelola oleh administrator SIMRS.
+                        Akun dikelola oleh administrator {{ $appName }}.
                     </p>
                 </div>
             </div>
@@ -76,7 +76,14 @@
                 <div class="z-1 flex items-center justify-center">
                     <x-common.common-grid-shape />
                     <div class="flex max-w-sm flex-col items-center px-6">
-                        <img src="{{ asset('images/logo/auth-logo.svg') }}" alt="SIMRS Portal" class="mb-5">
+                        @if ($appLogoUrl)
+                            <img src="{{ $appLogoUrl }}" alt="{{ $appName }}" class="mb-5 h-20 max-w-56 object-contain">
+                        @else
+                            <div class="mb-5 flex size-16 items-center justify-center rounded-2xl bg-brand-500 text-2xl font-semibold text-white">
+                                {{ strtoupper(mb_substr($appName, 0, 1)) }}
+                            </div>
+                        @endif
+                        <h2 class="mb-3 text-center text-2xl font-semibold text-white">{{ $appName }}</h2>
                         <p class="text-center text-gray-400 dark:text-white/60">
                             Portal integrasi SIMRS dan layanan SATUSEHAT.
                         </p>

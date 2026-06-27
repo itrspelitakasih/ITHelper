@@ -6,7 +6,7 @@
         @if (count($tabs) > 1)
             <div class="flex flex-wrap gap-2">
                 @foreach ($tabs as $key => $label)
-                    <a href="{{ route('satusehat.clinical-resources.index', [$group, $key]) }}" class="rounded-lg border px-4 py-2 text-sm font-medium {{ $type === $key ? 'border-brand-500 bg-brand-50 text-brand-600' : 'border-gray-200 text-gray-600 dark:border-gray-800 dark:text-gray-300' }}">{{ $label }}</a>
+                    <a href="{{ route('satusehat.clinical-resources.index', array_merge(['group' => $group, 'type' => $key], request()->except(['group', 'type', 'page']))) }}" class="rounded-lg border px-4 py-2 text-sm font-medium {{ $type === $key ? 'border-brand-500 bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'border-gray-200 text-gray-600 hover:border-brand-300 dark:border-gray-800 dark:text-gray-300 dark:hover:border-gray-700' }}">{{ $label }}</a>
                 @endforeach
             </div>
         @endif
@@ -23,7 +23,7 @@
                 <label class="lg:col-span-3"><span class="form-label">Dari Tanggal</span><input type="date" name="from" value="{{ $filters['from'] }}" class="form-control"></label>
                 <label class="lg:col-span-3"><span class="form-label">Sampai Tanggal</span><input type="date" name="to" value="{{ $filters['to'] }}" class="form-control"></label>
                 <label class="lg:col-span-4"><span class="form-label">Cari</span><input type="search" name="search" value="{{ $filters['search'] }}" placeholder="No. rawat, RM, pasien, order, atau pemeriksaan" class="form-control"></label>
-                <div class="flex items-end gap-2 lg:col-span-2"><button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white">Terapkan</button><a href="{{ route('satusehat.clinical-resources.index', [$group, $type]) }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700">Reset</a></div>
+                <div class="flex items-end gap-2 lg:col-span-2"><button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white hover:bg-brand-600">Terapkan</button><a href="{{ route('satusehat.clinical-resources.index', [$group, $type]) }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Reset</a></div>
             </form>
         </x-common.component-card>
         <x-common.component-card :title="'Daftar '.$definition['label']">
@@ -41,7 +41,7 @@
                     @if (auth()->user()->hasPermission($permission)) <button :disabled="selected.length === 0" class="rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50">Kirim Terpilih (<span x-text="selected.length">0</span>)</button> @endif
                 </div>
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800"><div class="max-w-full overflow-x-auto custom-scrollbar">
-                    <table class="w-full min-w-[1450px]"><thead class="bg-gray-50 dark:bg-gray-900"><tr class="border-b border-gray-200 dark:border-gray-800">
+                    <table class="w-full min-w-[1380px]"><thead class="bg-gray-50 dark:bg-gray-900"><tr class="border-b border-gray-200 dark:border-gray-800">
                         <th class="px-5 py-3 text-left"><input type="checkbox" class="size-4 rounded" :checked="selectable.length > 0 && selected.length === selectable.length" @change="selected = $event.target.checked ? [...selectable] : []"></th>
                         @foreach (['Waktu', 'No. Order / Rawat', 'Pasien', 'Jenis / Pemeriksaan', 'Detail', 'Dokter / Referensi', 'Status', 'ID SATUSEHAT'] as $heading) <th class="px-5 py-3 text-left text-xs font-medium uppercase text-gray-500">{{ $heading }}</th> @endforeach
                     </tr></thead><tbody>

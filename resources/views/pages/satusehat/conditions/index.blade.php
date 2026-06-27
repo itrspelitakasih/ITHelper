@@ -37,7 +37,7 @@
                 </label>
                 <div class="flex items-end gap-2 lg:col-span-2">
                     <button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white hover:bg-brand-600">Terapkan</button>
-                    <a href="{{ route('satusehat.conditions.index') }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700">Reset</a>
+                    <a href="{{ route('satusehat.conditions.index') }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Reset</a>
                 </div>
             </form>
             @error('to') <p class="text-sm text-error-500">{{ $message }}</p> @enderror
@@ -69,7 +69,7 @@
 
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
                     <div class="max-w-full overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[1350px]">
+                        <table class="w-full min-w-[1280px]">
                             <thead class="bg-gray-50 dark:bg-gray-900">
                                 <tr class="border-b border-gray-200 dark:border-gray-800">
                                     <th class="px-5 py-3 text-left">

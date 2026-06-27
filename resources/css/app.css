@@ -19,6 +19,10 @@
   @apply mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400;
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;

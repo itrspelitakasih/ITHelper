@@ -32,6 +32,22 @@ class MenuHelper
                     ['name' => 'Specimen', 'path' => '/satusehat/specimens/lab-mb', 'activePath' => '/satusehat/specimens/*', 'permission' => 'specimens.view'],
                 ],
             ],
+            [
+                'icon' => 'user-profile',
+                'name' => 'Rawat Jalan',
+                'subItems' => [
+                    ['name' => 'Registrasi Rawat Jalan', 'path' => '/rawat-jalan/registrasi', 'permission' => 'rawat-jalan.registrasi.view'],
+                    ['name' => 'Registrasi IGD', 'path' => '/rawat-jalan/igd', 'permission' => 'rawat-jalan.igd.view'],
+                ],
+            ],
+            [
+                'icon' => 'ui-elements',
+                'name' => 'Pemeriksaan Penunjang',
+                'subItems' => [
+                    ['name' => 'Laboratorium (SIMRS)', 'path' => '/laboratorium/permintaan', 'activePath' => '/laboratorium/permintaan*|/laboratorium/periksa*', 'permission' => 'laboratorium.view'],
+                    ['name' => 'Laboratorium (LIS)', 'path' => '/lis/periksa', 'activePath' => '/lis*|/laboratorium/simrs*', 'permission' => 'laboratorium.view'],
+                ],
+            ],
         ];
     }
 
@@ -42,7 +58,8 @@ class MenuHelper
                 'icon' => 'authentication',
                 'name' => 'Pengaturan',
                 'subItems' => [
-                    ['name' => 'Database Eksternal', 'path' => '/settings/database', 'permission' => 'settings.database'],
+                    ['name' => 'Aplikasi', 'path' => '/settings/app', 'permission' => 'settings.app'],
+                    ['name' => 'Bridging', 'path' => '/settings/database', 'permission' => 'settings.database'],
                     ['name' => 'User', 'path' => '/users', 'permission' => 'users.manage'],
                     ['name' => 'Role', 'path' => '/roles', 'permission' => 'roles.manage'],
                 ],

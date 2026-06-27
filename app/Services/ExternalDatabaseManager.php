@@ -26,6 +26,45 @@ class ExternalDatabaseManager
         return $this->connect($this->configuration($setting));
     }
 
+    public function antaraConnection(): Connection
+    {
+        $setting = $this->setting();
+
+        if (! $setting) {
+            throw new RuntimeException('Koneksi database eksternal belum dikonfigurasi.');
+        }
+
+        if (empty($setting->lis_antara_db_host)) {
+            return $this->connection();
+        }
+
+        return $this->connect($this->antaraConfiguration($setting), 'lis_antara');
+    }
+
+    public function antaraConfiguration(ExternalDatabaseSetting|array $setting): array
+    {
+        $value = fn (string $key, mixed $default = null) => is_array($setting)
+            ? ($setting[$key] ?? $default)
+            : ($setting->{$key} ?? $default);
+
+        return [
+            'driver' => 'mysql',
+            'host' => $value('lis_antara_db_host'),
+            'port' => $value('lis_antara_db_port', 3306),
+            'database' => $value('lis_antara_db_database'),
+            'username' => $value('lis_antara_db_username'),
+            'password' => $value('lis_antara_db_password', ''),
+            'unix_socket' => '',
+            'charset' => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => [],
+        ];
+    }
+
     public function test(array $configuration): void
     {
         $connection = $this->connect($configuration, 'external_test');

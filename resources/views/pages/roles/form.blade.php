@@ -24,7 +24,7 @@
                 @endforeach
             </div>
             @if ($errors->any()) <p class="text-sm text-error-500">{{ $errors->first() }}</p> @endif
-            <div class="flex justify-end gap-3"><a href="{{ route('roles.index') }}" class="rounded-lg border px-5 py-3 text-sm">Batal</a><button class="rounded-lg bg-brand-500 px-5 py-3 text-sm text-white">Simpan</button></div>
+            <div class="flex justify-end gap-3"><a href="{{ route('roles.index') }}" class="rounded-lg border border-gray-300 px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Batal</a><button class="rounded-lg bg-brand-500 px-5 py-3 text-sm text-white hover:bg-brand-600">Simpan</button></div>
         </form>
     </x-common.component-card>
 @endsection

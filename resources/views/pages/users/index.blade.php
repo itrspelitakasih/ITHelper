@@ -9,7 +9,7 @@
         </div>
         @if (session('success')) <div class="rounded-lg bg-success-50 p-3 text-sm text-success-700">{{ session('success') }}</div> @endif
         <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800">
-            <table class="w-full min-w-[800px]">
+            <table class="w-full min-w-[720px]">
                 <thead class="bg-gray-50 dark:bg-gray-900"><tr>
                     @foreach (['Nama', 'Email', 'Role', 'Dibuat', 'Aksi'] as $heading)
                         <th class="px-5 py-3 text-left text-xs font-medium uppercase text-gray-500">{{ $heading }}</th>
@@ -23,11 +23,11 @@
                             <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">{{ $user->roles->pluck('name')->join(', ') ?: '-' }}</td>
                             <td class="px-5 py-4 text-sm text-gray-500">{{ $user->created_at->format('d/m/Y') }}</td>
                             <td class="px-5 py-4"><div class="flex gap-2">
-                                <a href="{{ route('users.edit', $user) }}" class="rounded-lg border px-3 py-2 text-sm">Ubah</a>
+                                <a href="{{ route('users.edit', $user) }}" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Ubah</a>
                                 @unless (auth()->user()->is($user))
                                     <form method="POST" action="{{ route('users.destroy', $user) }}" onsubmit="return confirm('Hapus user ini?')">
                                         @csrf @method('DELETE')
-                                        <button class="rounded-lg border border-error-200 px-3 py-2 text-sm text-error-600">Hapus</button>
+                                        <button class="rounded-lg border border-error-200 px-3 py-2 text-sm text-error-600 hover:bg-error-50 dark:border-error-800/60 dark:text-error-400 dark:hover:bg-error-500/10">Hapus</button>
                                     </form>
                                 @endunless
                             </div></td>

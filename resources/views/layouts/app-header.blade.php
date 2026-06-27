@@ -49,9 +49,19 @@
             </button>
 
             <!-- Logo (mobile only) -->
-            <a href="/" class="xl:hidden">
-                <img class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+            <a href="/" class="flex min-w-0 items-center gap-2 xl:hidden">
+                @if ($appLogoUrl)
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg">
+                        <img src="{{ $appLogoUrl }}" alt="{{ $appName }}" class="max-h-8 max-w-8 object-contain" style="max-width: 32px; max-height: 32px;">
+                    </span>
+                @else
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-xs font-semibold text-white">
+                        {{ strtoupper(mb_substr($appName, 0, 1)) }}
+                    </span>
+                @endif
+                <span class="max-w-[160px] truncate text-base font-semibold text-gray-900 dark:text-white">
+                    {{ $appName }}
+                </span>
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

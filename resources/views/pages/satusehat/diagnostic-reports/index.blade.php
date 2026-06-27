@@ -6,8 +6,8 @@
     <div class="space-y-6">
         <div class="flex gap-2">
             @foreach (['lab' => 'Lab PK', 'radiology' => 'Radiologi'] as $key => $label)
-                <a href="{{ route('satusehat.diagnostic-reports.index', $key) }}"
-                    class="rounded-lg border px-4 py-2 text-sm font-medium {{ $type === $key ? 'border-brand-500 bg-brand-50 text-brand-600' : 'border-gray-200 text-gray-600 dark:border-gray-800 dark:text-gray-300' }}">
+                <a href="{{ route('satusehat.diagnostic-reports.index', array_merge(['type' => $key], request()->except(['type', 'page']))) }}"
+                    class="rounded-lg border px-4 py-2 text-sm font-medium {{ $type === $key ? 'border-brand-500 bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'border-gray-200 text-gray-600 hover:border-brand-300 dark:border-gray-800 dark:text-gray-300 dark:hover:border-gray-700' }}">
                     {{ $label }}
                 </a>
             @endforeach
@@ -31,8 +31,8 @@
                 <label class="lg:col-span-3"><span class="form-label">Sampai Tanggal</span><input type="date" name="to" value="{{ $filters['to'] }}" class="form-control"></label>
                 <label class="lg:col-span-4"><span class="form-label">Cari</span><input type="search" name="search" value="{{ $filters['search'] }}" placeholder="No. order, pasien, dokter, pemeriksaan, atau kode" class="form-control"></label>
                 <div class="flex items-end gap-2 lg:col-span-2">
-                    <button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white">Terapkan</button>
-                    <a href="{{ route('satusehat.diagnostic-reports.index', $type) }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700">Reset</a>
+                    <button class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white hover:bg-brand-600">Terapkan</button>
+                    <a href="{{ route('satusehat.diagnostic-reports.index', $type) }}" class="inline-flex h-11 items-center rounded-lg border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-white/[0.05]">Reset</a>
                 </div>
             </form>
         </x-common.component-card>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
                     <div class="max-w-full overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[1800px]">
+                        <table class="w-full min-w-[1680px]">
                             <thead class="bg-gray-50 dark:bg-gray-900"><tr class="border-b border-gray-200 dark:border-gray-800">
                                 <th class="px-5 py-3 text-left"><input type="checkbox" class="size-4 rounded" :checked="selectable.length > 0 && selected.length === selectable.length" @change="selected = $event.target.checked ? [...selectable] : []"></th>
                                 @foreach (['Waktu Hasil', 'No. Order / Rawat', 'Pasien', 'Dokter', 'Pemeriksaan', 'Diagnosa Klinis', 'Kesan / Hasil', 'Kode Mapping', 'Rantai SATUSEHAT', 'Status', 'ID Diagnostic Report'] as $heading)
