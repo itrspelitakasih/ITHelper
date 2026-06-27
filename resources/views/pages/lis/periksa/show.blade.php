@@ -420,9 +420,9 @@
                 </div>
 
                 <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
-                    <div class="max-w-full overflow-x-auto custom-scrollbar">
+                    <div class="max-w-full max-h-[550px] overflow-auto custom-scrollbar">
                         <table class="w-full min-w-[800px] border-collapse text-left">
-                            <thead class="bg-gray-50 dark:bg-gray-900">
+                            <thead class="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800">
                                 <tr class="border-b border-gray-200 dark:border-gray-800">
                                     @if($model->validasi == 0)
                                         <th class="px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-10">P</th>
