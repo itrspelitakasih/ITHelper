@@ -440,58 +440,138 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                @forelse ($detail as $row)
-                                    <tr class="hover:bg-gray-50/20 dark:hover:bg-gray-800/10"
-                                        x-show="paramQuery === '' || '{{ addslashes(strtolower($row->nama ?? $row->KodeParamater)) }}'.includes(paramQuery.toLowerCase())">
-                                        @if($model->validasi == 0)
-                                            <td class="px-4 py-3 text-center">
-                                                <input type="checkbox" value="{{ $row->id }}" x-model="selectedRows" @change="updateSelectAll()"
-                                                    class="size-4 text-brand-600 focus:ring-brand-500 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded cursor-pointer">
-                                            </td>
-                                        @endif
-                                        <td class="px-4 py-3 font-semibold text-gray-905 dark:text-white">
-                                            {{ $row->nama ?? $row->KodeParamater }}
-                                            <span class="block text-[10px] font-normal text-gray-400">LIS: {{ $row->KodeParamater }} / Alat: {{ $row->KodeAlat }}</span>
+                                @php
+                                    $groupedDetail = [];
+                                    foreach ($detail as $row) {
+                                        $g1 = $row->grup1 ?: 'LAIN-LAIN';
+                                        $g2 = $row->grup2 ?: $g1;
+                                        $g3 = $row->grup3 ?: $g2;
+                                        $groupedDetail[$g1][$g2][$g3][] = $row;
+                                    }
+                                @endphp
+                                @forelse ($groupedDetail as $grup1 => $g2s)
+                                    @php
+                                        $g1Params = [];
+                                        foreach ($g2s as $g2 => $g3s) {
+                                            foreach ($g3s as $g3 => $rows) {
+                                                foreach ($rows as $row) {
+                                                    $g1Params[] = addslashes(strtolower($row->nama ?? $row->KodeParamater));
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    <tr class="bg-slate-50 dark:bg-slate-800/40 border-b border-gray-200 dark:border-gray-800"
+                                        x-show="paramQuery === '' || {{ json_encode($g1Params) }}.some(p => p.includes(paramQuery.toLowerCase()))">
+                                        <td colspan="100" class="px-4 py-3 bg-slate-50 dark:bg-slate-800/40">
+                                            <div class="flex items-center gap-2">
+                                                <svg class="size-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                                </svg>
+                                                <span class="text-xs font-bold tracking-wider text-slate-700 dark:text-slate-200 uppercase">
+                                                    {{ $grup1 }}
+                                                </span>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <input type="text" value="{{ $row->Nilai }}" 
-                                                @change="updateGeneric('{{ route('lis.result.nilai') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-center text-sm font-semibold text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 font-mono">
-                                            {{ $row->satuan ?: '-' }}
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <input type="text" value="{{ $row->NR ?: $row->parameter }}" 
-                                                @change="updateGeneric('{{ route('lis.result.nr') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-650 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <input type="text" value="{{ $row->tanda }}" 
-                                                @change="updateGeneric('{{ route('lis.result.tanda') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                class="h-9 w-full rounded border border-gray-300 bg-transparent px-1 text-center text-sm text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <input type="text" value="{{ $row->keterangan }}" 
-                                                @change="updateGeneric('{{ route('lis.result.keterangan') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-600 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold text-gray-400">
-                                            0
-                                        </td>
-                                        @if($model->validasi == 0)
-                                            <td class="px-4 py-3 text-center">
-                                                <button type="button" @click="deleteRow({{ $row->id }}, $event.target)"
-                                                    class="inline-flex size-7 items-center justify-center rounded bg-error-50 text-error-600 hover:bg-error-100 dark:bg-error-500/10 dark:text-error-400">
-                                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                </button>
-                                            </td>
-                                        @endif
                                     </tr>
+
+                                    @foreach ($g2s as $grup2 => $g3s)
+                                        @php
+                                            $g2Params = [];
+                                            foreach ($g3s as $g3 => $rows) {
+                                                foreach ($rows as $row) {
+                                                    $g2Params[] = addslashes(strtolower($row->nama ?? $row->KodeParamater));
+                                                }
+                                            }
+                                        @endphp
+                                        @if ($grup2 !== $grup1)
+                                            <tr class="bg-gray-50/40 dark:bg-gray-800/20 border-b border-gray-255 dark:border-gray-755"
+                                                x-show="paramQuery === '' || {{ json_encode($g2Params) }}.some(p => p.includes(paramQuery.toLowerCase()))">
+                                                <td colspan="100" class="px-4 py-2 pl-8">
+                                                    <div class="flex items-center gap-1.5">
+                                                        <svg class="size-3 text-gray-400 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                        <span class="text-xs font-bold text-gray-650 dark:text-gray-300">
+                                                            {{ $grup2 }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                        @foreach ($g3s as $grup3 => $rows)
+                                            @php
+                                                $g3Params = [];
+                                                foreach ($rows as $row) {
+                                                    $g3Params[] = addslashes(strtolower($row->nama ?? $row->KodeParamater));
+                                                }
+                                            @endphp
+                                            @if ($grup3 !== $grup2)
+                                                <tr class="bg-gray-50/10 dark:bg-gray-800/5 border-b border-gray-150 dark:border-gray-850"
+                                                    x-show="paramQuery === '' || {{ json_encode($g3Params) }}.some(p => p.includes(paramQuery.toLowerCase()))">
+                                                    <td colspan="100" class="px-4 py-1.5 pl-12">
+                                                        <span class="text-[11px] font-semibold text-gray-550 dark:text-gray-400 italic">
+                                                            {{ $grup3 }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            @foreach ($rows as $row)
+                                                <tr class="hover:bg-gray-50/20 dark:hover:bg-gray-800/10"
+                                                    x-show="paramQuery === '' || '{{ addslashes(strtolower($row->nama ?? $row->KodeParamater)) }}'.includes(paramQuery.toLowerCase())">
+                                                    @if($model->validasi == 0)
+                                                        <td class="px-4 py-3 text-center">
+                                                            <input type="checkbox" value="{{ $row->id }}" x-model="selectedRows" @change="updateSelectAll()"
+                                                                class="size-4 text-brand-600 focus:ring-brand-500 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded cursor-pointer">
+                                                        </td>
+                                                    @endif
+                                                    <td class="px-4 py-3 font-semibold text-gray-905 dark:text-white pl-8">
+                                                        {{ $row->nama ?? $row->KodeParamater }}
+                                                        <span class="block text-[10px] font-normal text-gray-400">LIS: {{ $row->KodeParamater }} / Alat: {{ $row->KodeAlat }}</span>
+                                                    </td>
+                                                    <td class="px-4 py-3">
+                                                        <input type="text" value="{{ $row->Nilai }}" 
+                                                            @change="updateGeneric('{{ route('lis.result.nilai') }}', { id: {{ $row->id }}, value: $event.target.value })"
+                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
+                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-center text-sm font-semibold text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                                                    </td>
+                                                    <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 font-mono">
+                                                        {{ $row->satuan ?: '-' }}
+                                                    </td>
+                                                    <td class="px-4 py-3">
+                                                        <input type="text" value="{{ $row->NR ?: $row->parameter }}" 
+                                                            @change="updateGeneric('{{ route('lis.result.nr') }}', { id: {{ $row->id }}, value: $event.target.value })"
+                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
+                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-650 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                                                    </td>
+                                                    <td class="px-4 py-3">
+                                                        <input type="text" value="{{ $row->tanda }}" 
+                                                            @change="updateGeneric('{{ route('lis.result.tanda') }}', { id: {{ $row->id }}, value: $event.target.value })"
+                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
+                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-1 text-center text-sm text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                                                    </td>
+                                                    <td class="px-4 py-3">
+                                                        <input type="text" value="{{ $row->keterangan }}" 
+                                                            @change="updateGeneric('{{ route('lis.result.keterangan') }}', { id: {{ $row->id }}, value: $event.target.value })"
+                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
+                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-600 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                                                    </td>
+                                                    <td class="px-4 py-3 text-sm font-semibold text-gray-400">
+                                                        0
+                                                    </td>
+                                                    @if($model->validasi == 0)
+                                                        <td class="px-4 py-3 text-center">
+                                                            <button type="button" @click="deleteRow({{ $row->id }}, $event.target)"
+                                                                class="inline-flex size-7 items-center justify-center rounded bg-error-50 text-error-600 hover:bg-error-100 dark:bg-error-500/10 dark:text-error-400">
+                                                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                            </button>
+                                                        </td>
+                                                    @endif
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
                                 @empty
                                     <tr>
                                         <td colspan="{{ $model->validasi == 0 ? 9 : 7 }}" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">

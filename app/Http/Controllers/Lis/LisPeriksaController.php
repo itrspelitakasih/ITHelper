@@ -268,6 +268,7 @@ class LisPeriksaController extends Controller
         $detail = DB::connection('lis')
             ->table('result as a')
             ->leftJoin('kode as b', 'a.KodeParamater', '=', 'b.lis')
+            ->leftJoin('v_grup as c', 'b.grup1', '=', 'c.nama')
             ->where('a.KodePatient', $periksa->nomor)
             ->select([
                 'b.nama',
@@ -282,8 +283,18 @@ class LisPeriksaController extends Controller
                 'b.pembulatan',
                 'a.NR',
                 'a.tanda',
-                'a.keterangan'
+                'a.keterangan',
+                'b.grup1',
+                'b.grup2',
+                'b.grup3',
+                'c.order as grup_order',
+                'b.order as param_order'
             ])
+            ->orderBy('grup_order')
+            ->orderBy('b.grup1')
+            ->orderBy('b.grup2')
+            ->orderBy('b.grup3')
+            ->orderBy('b.order')
             ->get();
 
         // References for selection modals
