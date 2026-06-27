@@ -431,9 +431,6 @@
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Hasil</th>
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-24">Satuan</th>
                                     <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-36">Nilai Rujukan</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-20">Tanda</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500">Keterangan</th>
-                                    <th class="px-4 py-2.5 text-xs font-medium uppercase text-gray-500 w-32">Biaya Item</th>
                                     @if($model->validasi == 0)
                                         <th class="px-4 py-2.5 text-center text-xs font-medium uppercase text-gray-500 w-16">Aksi</th>
                                     @endif
@@ -539,26 +536,8 @@
                                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300 font-mono">
                                                         {{ $row->satuan ?: '-' }}
                                                     </td>
-                                                    <td class="px-4 py-3">
-                                                        <input type="text" value="{{ $row->NR ?: $row->parameter }}" 
-                                                            @change="updateGeneric('{{ route('lis.result.nr') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-650 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                                    </td>
-                                                    <td class="px-4 py-3">
-                                                        <input type="text" value="{{ $row->tanda }}" 
-                                                            @change="updateGeneric('{{ route('lis.result.tanda') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-1 text-center text-sm text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                                    </td>
-                                                    <td class="px-4 py-3">
-                                                        <input type="text" value="{{ $row->keterangan }}" 
-                                                            @change="updateGeneric('{{ route('lis.result.keterangan') }}', { id: {{ $row->id }}, value: $event.target.value })"
-                                                            {{ $model->validasi == 1 ? 'disabled' : '' }}
-                                                            class="h-9 w-full rounded border border-gray-300 bg-transparent px-2 text-sm text-gray-600 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
-                                                    </td>
-                                                    <td class="px-4 py-3 text-sm font-semibold text-gray-400">
-                                                        0
+                                                    <td class="px-4 py-3 text-sm text-gray-650 dark:text-gray-300 font-mono">
+                                                        {{ $row->normal_range ?: '-' }}
                                                     </td>
                                                     @if($model->validasi == 0)
                                                         <td class="px-4 py-3 text-center">
@@ -574,7 +553,7 @@
                                     @endforeach
                                 @empty
                                     <tr>
-                                        <td colspan="{{ $model->validasi == 0 ? 9 : 7 }}" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        <td colspan="{{ $model->validasi == 0 ? 6 : 4 }}" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                             Belum ada parameter pemeriksaan. Tambahkan parameter menggunakan tombol di atas.
                                         </td>
                                     </tr>

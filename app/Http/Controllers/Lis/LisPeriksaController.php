@@ -16,6 +16,7 @@ use App\Models\Lis\PeriksaBiaya;
 use App\Models\Lis\Petugas;
 use App\Models\Lis\Paket;
 use App\Models\Lis\PaketDetail;
+use App\Models\Lis\Log;
 use App\Models\Lis\Formula;
 use App\Models\Lis\Parameter;
 use App\Services\ExternalDatabaseManager;
@@ -296,6 +297,28 @@ class LisPeriksaController extends Controller
             ->orderBy('b.grup3')
             ->orderBy('b.order')
             ->get();
+
+        // Dynamically resolve normal range for each detail row
+        $ageDays = 0;
+        $gender = 1; // Default Male
+        if ($extPasien) {
+            $birth = @strtotime($extPasien->tgl_lahir);
+            if ($birth) {
+                $ageDays = floor((time() - $birth) / (60 * 60 * 24));
+            }
+            $gender = ($extPasien->jk ?? 'L') === 'L' ? 1 : 2;
+        } elseif ($periksa->pasien) {
+            $birth = @strtotime($periksa->pasien->tgl_lahir);
+            if ($birth) {
+                $ageDays = floor((time() - $birth) / (60 * 60 * 24));
+            }
+            $gender = (int)($periksa->pasien->gender ?? 1);
+        }
+
+        $vKodes = DB::connection('lis')->table('v_kode')->get();
+        foreach ($detail as $row) {
+            $row->normal_range = $row->NR ?: $this->getNormalRange($row, $gender, $ageDays, $vKodes);
+        }
 
         // References for selection modals
         $modelKode = Kode::orderBy('grup1')->get();
@@ -1028,16 +1051,27 @@ class LisPeriksaController extends Controller
 
         // Calculate age in days for normal range evaluation
         $ageDays = 0;
+        $gender = 1; // Default Male
         if ($extPasien) {
-            $birth = strtotime($extPasien->tgl_lahir);
-            $ageDays = floor((time() - $birth) / (60 * 60 * 24));
+            $birth = @strtotime($extPasien->tgl_lahir);
+            if ($birth) {
+                $ageDays = floor((time() - $birth) / (60 * 60 * 24));
+            }
+            $gender = ($extPasien->jk ?? 'L') === 'L' ? 1 : 2;
+        } elseif ($periksa->pasien) {
+            $birth = @strtotime($periksa->pasien->tgl_lahir);
+            if ($birth) {
+                $ageDays = floor((time() - $birth) / (60 * 60 * 24));
+            }
+            $gender = (int)($periksa->pasien->gender ?? 1);
         }
+
+        $vKodes = DB::connection('lis')->table('v_kode')->get();
 
         // Group rows in hierarchy (grup1 -> grup2 -> grup3)
         $groupedDetails = [];
         foreach ($detail as $row) {
             // Evaluates normal range and flags
-            $gender = ($extPasien->jk ?? 'L') === 'L' ? 1 : 2;
             
             // Format Nilai according to precision config
             $val = floatval($row->Nilai);
@@ -1059,17 +1093,7 @@ class LisPeriksaController extends Controller
             $isKritis = false;
             
             // If custom normal range exists
-            $nr = $row->NR ?: '';
-            if (empty($nr)) {
-                // Fetch from v_kode
-                $nr = DB::connection('lis')
-                    ->table('v_kode')
-                    ->where('lis', $row->KodeParamater)
-                    ->where('sex', $gender)
-                    ->where('umur1', '<=', $ageDays)
-                    ->where('umur2', '>=', $ageDays)
-                    ->value('nr') ?? '';
-            }
+            $nr = $row->NR ?: $this->getNormalRange($row, $gender, $ageDays, $vKodes);
 
             $row->formatted_nilai = $formattedVal;
             $row->flag = $flag;
@@ -1506,5 +1530,76 @@ class LisPeriksaController extends Controller
         } catch (Throwable $e) {
             // Log or ignore
         }
+    }
+
+    private function getNormalRange($row, $gender, $ageDays, $vKodes)
+    {
+        $normalize = function ($name) {
+            if (empty($name)) return '';
+            $name = strtolower($name);
+            $name = str_replace([' ', '-', '_', '/'], '', $name);
+            return $name;
+        };
+
+        $synonyms = [
+            'eritosit' => 'Eritrosit-Urine',
+            'eritosit-urine' => 'Eritrosit-Urine',
+        ];
+
+        $searchNames = [strtolower($row->KodeParamater ?? ''), strtolower($row->nama ?? '')];
+        foreach ($searchNames as $sn) {
+            $norm = $normalize($sn);
+            if (isset($synonyms[$norm])) {
+                $searchNames[] = strtolower($synonyms[$norm]);
+            }
+        }
+        $searchNames = array_unique($searchNames);
+
+        // Phase 1: Try exact matches
+        $candidates = $vKodes->filter(function($v) use ($searchNames, $normalize) {
+            $vLisLower = strtolower($v->lis);
+            $vLisNorm = $normalize($v->lis);
+            foreach ($searchNames as $sn) {
+                if ($vLisLower === $sn || $vLisNorm === $normalize($sn)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // Phase 2: Fuzzy matches if no exact match found
+        if ($candidates->isEmpty()) {
+            $candidates = $vKodes->filter(function($v) use ($searchNames, $normalize) {
+                $vLisNorm = $normalize($v->lis);
+                foreach ($searchNames as $sn) {
+                    $snNorm = $normalize($sn);
+                    if (!empty($vLisNorm) && !empty($snNorm) && (str_contains($snNorm, $vLisNorm) || str_contains($vLisNorm, $snNorm))) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+
+        // Filter by sex and age
+        $matched = $candidates->filter(function($v) use ($gender, $ageDays) {
+            $sexMatch = ($v->sex == $gender || $v->sex == 0);
+            if (!$sexMatch) return false;
+            $ageMatch = ($v->umur1 <= $ageDays && $v->umur2 >= $ageDays && $v->umur2 > 0) || ($v->umur1 == 0 && $v->umur2 == 0);
+            return $ageMatch;
+        })
+        ->sort(function($a, $b) use ($gender) {
+            $aSexSpec = ($a->sex == $gender) ? 1 : 0;
+            $bSexSpec = ($b->sex == $gender) ? 1 : 0;
+            if ($aSexSpec !== $bSexSpec) {
+                return $bSexSpec <=> $aSexSpec;
+            }
+            $aAgeSpec = ($a->umur2 > 0) ? 1 : 0;
+            $bAgeSpec = ($b->umur2 > 0) ? 1 : 0;
+            return $bAgeSpec <=> $aAgeSpec;
+        })
+        ->first();
+
+        return $matched ? $matched->nr : '';
     }
 }
