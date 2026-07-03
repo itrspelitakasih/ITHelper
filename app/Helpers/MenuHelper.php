@@ -48,6 +48,13 @@ class MenuHelper
                     ['name' => 'Laboratorium (LIS)', 'path' => '/lis/periksa-simrs', 'activePath' => '/lis*|/laboratorium/simrs*', 'permission' => 'laboratorium.view'],
                 ],
             ],
+            [
+                'icon' => 'chat',
+                'name' => 'WhatsApp Gateway',
+                'path' => '/whatsapp',
+                'permission' => 'whatsapp.view',
+                'badge' => \Schema::hasTable('whatsapp_messages') ? \App\Models\WhatsAppMessage::where('direction', 'inbound')->where('status', 'unread')->count() : 0,
+            ],
         ];
     }
 
@@ -90,7 +97,7 @@ class MenuHelper
                 }
 
                 return $item;
-            }, $group['items']), fn ($item) => ! isset($item['subItems']) || count($item['subItems']) > 0));
+            }, $group['items']), fn ($item) => (! isset($item['subItems']) && self::canSee($item['permission'] ?? null)) || (isset($item['subItems']) && count($item['subItems']) > 0)));
 
             return $group;
         }, $groups), fn ($group) => count($group['items']) > 0));

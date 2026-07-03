@@ -209,8 +209,13 @@
                                             <!-- Text -->
                                             <span
                                                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                                                class="menu-item-text flex items-center gap-2">
-                                                {{ $item['name'] }}
+                                                class="menu-item-text flex-1 flex items-center justify-between gap-2">
+                                                <span>{{ $item['name'] }}</span>
+                                                @if (!empty($item['badge']))
+                                                    <span class="inline-flex size-5 items-center justify-center rounded-full bg-error-500 text-white text-3xs font-bold font-outfit">
+                                                        {{ $item['badge'] }}
+                                                    </span>
+                                                @endif
                                                 @if (!empty($item['new']))
                                                     <span
                                                         class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-brand-500 text-white">

@@ -187,5 +187,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/referensi/paket/{id}/delete', [\App\Http\Controllers\Lis\LisReferensiController::class, 'deletePaketDetail'])->name('referensi.paket.delete');
     });
 
+    Route::get('/whatsapp', [App\Http\Controllers\WhatsAppController::class, 'index'])
+        ->middleware('permission:whatsapp.view')
+        ->name('whatsapp.index');
+    Route::post('/whatsapp/send', [App\Http\Controllers\WhatsAppController::class, 'send'])
+        ->middleware('permission:whatsapp.send')
+        ->name('whatsapp.send');
+
     Route::get('/profile', fn () => view('pages.profile', ['title' => 'Profile']))->name('profile');
 });
+
+Route::post('/whatsapp/webhook', [App\Http\Controllers\WhatsAppController::class, 'webhook'])->name('whatsapp.webhook');
+

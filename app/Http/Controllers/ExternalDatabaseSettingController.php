@@ -14,6 +14,10 @@ class ExternalDatabaseSettingController extends Controller
         return view('pages.settings.database', [
             'title' => 'Database Eksternal',
             'setting' => ExternalDatabaseSetting::query()->latest()->first(),
+            'whatsappApiUrl' => \App\Models\ApplicationSetting::query()->where('key', 'whatsapp_api_url')->value('value') ?: 'http://localhost:3000',
+            'whatsappBasicAuthUser' => \App\Models\ApplicationSetting::query()->where('key', 'whatsapp_basic_auth_user')->value('value') ?: '',
+            'whatsappBasicAuthPassword' => \App\Models\ApplicationSetting::query()->where('key', 'whatsapp_basic_auth_password')->value('value') ?: '',
+            'whatsappWebhookSecret' => \App\Models\ApplicationSetting::query()->where('key', 'whatsapp_webhook_secret')->value('value') ?: 'secret',
         ]);
     }
 
@@ -46,7 +50,22 @@ class ExternalDatabaseSettingController extends Controller
             'lis_antara_db_database' => ['nullable', 'string', 'max:100'],
             'lis_antara_db_username' => ['nullable', 'string', 'max:100'],
             'lis_antara_db_password' => ['nullable', 'string', 'max:255'],
+            'whatsapp_api_url' => ['nullable', 'url', 'max:255'],
+            'whatsapp_basic_auth_user' => ['nullable', 'string', 'max:100'],
+            'whatsapp_basic_auth_password' => ['nullable', 'string', 'max:100'],
+            'whatsapp_webhook_secret' => ['nullable', 'string', 'max:100'],
         ]);
+
+        // Save WhatsApp settings
+        $whatsappPassword = $data['whatsapp_basic_auth_password'] ?? '';
+        if ($whatsappPassword === '') {
+            $whatsappPassword = \App\Models\ApplicationSetting::query()->where('key', 'whatsapp_basic_auth_password')->value('value') ?: '';
+        }
+
+        \App\Models\ApplicationSetting::query()->updateOrCreate(['key' => 'whatsapp_api_url'], ['value' => $data['whatsapp_api_url'] ?? '']);
+        \App\Models\ApplicationSetting::query()->updateOrCreate(['key' => 'whatsapp_basic_auth_user'], ['value' => $data['whatsapp_basic_auth_user'] ?? '']);
+        \App\Models\ApplicationSetting::query()->updateOrCreate(['key' => 'whatsapp_basic_auth_password'], ['value' => $whatsappPassword]);
+        \App\Models\ApplicationSetting::query()->updateOrCreate(['key' => 'whatsapp_webhook_secret'], ['value' => $data['whatsapp_webhook_secret'] ?? '']);
 
         foreach (['password', 'satusehat_client_id', 'satusehat_client_secret', 'lis_db_password', 'lis_antara_db_password'] as $secret) {
             if (($data[$secret] ?? '') === '' && $setting) {
