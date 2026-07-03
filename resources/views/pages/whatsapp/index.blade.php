@@ -124,17 +124,17 @@
 
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center justify-between">
-                                    <span class="font-medium text-sm text-gray-900 dark:text-white truncate">
+                                    <span class="text-sm truncate {{ (!empty($chat->unread_count) && $chat->unread_count > 0) ? 'font-bold text-gray-900 dark:text-white' : 'font-medium text-gray-800 dark:text-white/90' }}">
                                         {{ $chat->name ?: '+' . $chat->phone }}
                                     </span>
-                                    <span class="text-3xs text-gray-400 shrink-0 ml-1">
+                                    <span class="text-3xs shrink-0 ml-1 {{ (!empty($chat->unread_count) && $chat->unread_count > 0) ? 'text-success-600 dark:text-success-400 font-semibold' : 'text-gray-400' }}">
                                         {{ $timeLabel }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between mt-1 gap-2">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate flex-1">
+                                    <p class="text-xs truncate flex-1 {{ (!empty($chat->unread_count) && $chat->unread_count > 0) ? 'text-gray-900 dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400' }}">
                                         @if ($chat->direction === 'outbound')
-                                            <span class="text-brand-500 dark:text-brand-400">Anda:</span>
+                                            <span class="text-brand-500 dark:text-brand-400 font-normal">Anda:</span>
                                         @endif
                                         {{ $chat->message }}
                                     </p>

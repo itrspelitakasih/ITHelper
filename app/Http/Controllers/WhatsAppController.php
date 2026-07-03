@@ -45,6 +45,8 @@ class WhatsAppController extends Controller
                 $phone = WhatsAppService::cleanJid($jid);
                 if (!$phone) continue;
 
+                $gowaUnread = max((int)($c['unread_count'] ?? $c['unreadCount'] ?? 0), (int)($unreadCounts[$phone] ?? 0));
+
                 $chats->push((object)[
                     'phone' => $phone,
                     'name' => $c['name'] ?? '',
@@ -53,9 +55,41 @@ class WhatsAppController extends Controller
                     'created_at' => isset($c['last_message_time']) ? \Carbon\Carbon::parse($c['last_message_time']) : now(),
                     'status' => 'read',
                     'device_id' => $activeDeviceId,
-                    'unread_count' => $unreadCounts[$phone] ?? 0,
+                    'unread_count' => $gowaUnread,
                 ]);
             }
+
+            // Merge chats from local DB that are not in GOWA chats
+            $localChats = WhatsAppMessage::query()
+                ->select('phone', 'name', 'message', 'direction', 'status', 'created_at', 'device_id')
+                ->whereIn('id', function($query) {
+                    $query->select(\DB::raw('MAX(id)'))
+                          ->from('whatsapp_messages')
+                          ->groupBy('phone');
+                })
+                ->get();
+
+            foreach ($localChats as $lc) {
+                $exists = $chats->contains(function ($c) use ($lc) {
+                    return $c->phone === $lc->phone;
+                });
+
+                if (!$exists) {
+                    $chats->push((object)[
+                        'phone' => $lc->phone,
+                        'name' => $lc->name ?? '',
+                        'message' => $lc->message,
+                        'direction' => $lc->direction,
+                        'status' => $lc->status,
+                        'created_at' => $lc->created_at,
+                        'device_id' => $lc->device_id ?? $activeDeviceId,
+                        'unread_count' => $unreadCounts[$lc->phone] ?? 0,
+                    ]);
+                }
+            }
+
+            // Sort all chats by created_at desc
+            $chats = $chats->sortByDesc('created_at')->values();
 
             if ($search) {
                 $chats = $chats->filter(function ($c) use ($search) {
