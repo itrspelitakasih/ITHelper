@@ -168,33 +168,6 @@
                     </div>
                 </x-common.component-card>
 
-                <!-- WhatsApp Gateway Card -->
-                <x-common.component-card title="WhatsApp Gateway (GOWA)" desc="Konfigurasi koneksi ke server API go-whatsapp-web-multidevice.">
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <label class="block sm:col-span-2">
-                            <span class="form-label">WhatsApp API URL</span>
-                            <input type="url" name="whatsapp_api_url" value="{{ old('whatsapp_api_url', $whatsappApiUrl) }}" class="form-control" placeholder="http://localhost:3000">
-                            @error('whatsapp_api_url')
-                                <p class="mt-1.5 text-sm text-error-500">{{ $message }}</p>
-                            @enderror
-                        </label>
-                        <label class="block sm:col-span-2">
-                            <span class="form-label">Webhook Secret Signature</span>
-                            <input name="whatsapp_webhook_secret" value="{{ old('whatsapp_webhook_secret', $whatsappWebhookSecret) }}" class="form-control" placeholder="secret">
-                            @error('whatsapp_webhook_secret')
-                                <p class="mt-1.5 text-sm text-error-500">{{ $message }}</p>
-                            @enderror
-                        </label>
-                        <label class="block">
-                            <span class="form-label">Basic Auth Username (Opsional)</span>
-                            <input name="whatsapp_basic_auth_user" value="{{ old('whatsapp_basic_auth_user', $whatsappBasicAuthUser) }}" class="form-control" placeholder="Username">
-                        </label>
-                        <label class="block">
-                            <span class="form-label">Basic Auth Password (Opsional)</span>
-                            <input type="password" name="whatsapp_basic_auth_password" class="form-control" placeholder="Kosongkan jika tidak berubah">
-                        </label>
-                    </div>
-                </x-common.component-card>
 
             </div>
 

@@ -13,6 +13,27 @@ class MenuHelper
                 'path' => '/',
             ],
             [
+                'icon' => 'user-profile',
+                'name' => 'Rawat Jalan',
+                'subItems' => [
+                    ['name' => 'Registrasi Rawat Jalan', 'path' => '/rawat-jalan/registrasi', 'permission' => 'rawat-jalan.registrasi.view'],
+                    ['name' => 'Registrasi IGD', 'path' => '/rawat-jalan/igd', 'permission' => 'rawat-jalan.igd.view'],
+                ],
+            ],
+            [
+                'icon' => 'ui-elements',
+                'name' => 'Pemeriksaan Penunjang',
+                'subItems' => [
+                    ['name' => 'Laboratorium (SIMRS)', 'path' => '/laboratorium/permintaan', 'activePath' => '/laboratorium/permintaan*|/laboratorium/periksa*', 'permission' => 'laboratorium.view'],
+                ],
+            ],
+        ];
+    }
+
+    public static function getBridgingNavItems()
+    {
+        return [
+            [
                 'icon' => 'tables',
                 'name' => 'SATUSEHAT',
                 'subItems' => [
@@ -33,30 +54,16 @@ class MenuHelper
                 ],
             ],
             [
-                'icon' => 'user-profile',
-                'name' => 'Rawat Jalan',
-                'subItems' => [
-                    ['name' => 'Registrasi Rawat Jalan', 'path' => '/rawat-jalan/registrasi', 'permission' => 'rawat-jalan.registrasi.view'],
-                    ['name' => 'Registrasi IGD', 'path' => '/rawat-jalan/igd', 'permission' => 'rawat-jalan.igd.view'],
-                ],
-            ],
-            [
                 'icon' => 'ui-elements',
-                'name' => 'Pemeriksaan Penunjang',
-                'subItems' => [
-                    ['name' => 'Laboratorium (SIMRS)', 'path' => '/laboratorium/permintaan', 'activePath' => '/laboratorium/permintaan*|/laboratorium/periksa*', 'permission' => 'laboratorium.view'],
-                    ['name' => 'Laboratorium (LIS)', 'path' => '/lis/periksa-simrs', 'activePath' => '/lis*|/laboratorium/simrs*', 'permission' => 'laboratorium.view'],
-                ],
-            ],
-            [
-                'icon' => 'chat',
-                'name' => 'WhatsApp Gateway',
-                'path' => '/whatsapp',
-                'permission' => 'whatsapp.view',
-                'badge' => \Schema::hasTable('whatsapp_messages') ? \App\Models\WhatsAppMessage::where('direction', 'inbound')->where('status', 'unread')->count() : 0,
+                'name' => 'Laboratorium (LIS)',
+                'path' => '/lis/periksa-simrs',
+                'activePath' => '/lis*|/laboratorium/simrs*',
+                'permission' => 'laboratorium.view',
             ],
         ];
     }
+
+
 
     public static function getOthersItems()
     {
@@ -80,6 +87,10 @@ class MenuHelper
             [
                 'title' => 'Menu',
                 'items' => self::getMainNavItems()
+            ],
+            [
+                'title' => 'Bridging',
+                'items' => self::getBridgingNavItems()
             ],
             [
                 'title' => 'Others',
@@ -151,6 +162,17 @@ class MenuHelper
             'support-ticket' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 17.0518V12C20 7.58174 16.4183 4 12 4C7.58168 4 3.99994 7.58174 3.99994 12V17.0518M19.9998 14.041V19.75C19.9998 20.5784 19.3282 21.25 18.4998 21.25H13.9998M6.5 18.75H5.5C4.67157 18.75 4 18.0784 4 17.25V13.75C4 12.9216 4.67157 12.25 5.5 12.25H6.5C7.32843 12.25 8 12.9216 8 13.75V17.25C8 18.0784 7.32843 18.75 6.5 18.75ZM17.4999 18.75H18.4999C19.3284 18.75 19.9999 18.0784 19.9999 17.25V13.75C19.9999 12.9216 19.3284 12.25 18.4999 12.25H17.4999C16.6715 12.25 15.9999 12.9216 15.9999 13.75V17.25C15.9999 18.0784 16.6715 18.75 17.4999 18.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
 
             'email' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 8.187V17.25C3.5 17.6642 3.83579 18 4.25 18H19.75C20.1642 18 20.5 17.6642 20.5 17.25V8.18747L13.2873 13.2171C12.5141 13.7563 11.4866 13.7563 10.7134 13.2171L3.5 8.187ZM20.5 6.2286C20.5 6.23039 20.5 6.23218 20.5 6.23398V6.24336C20.4976 6.31753 20.4604 6.38643 20.3992 6.42905L12.4293 11.9867C12.1716 12.1664 11.8291 12.1664 11.5713 11.9867L3.60116 6.42885C3.538 6.38481 3.50035 6.31268 3.50032 6.23568C3.50028 6.10553 3.60577 6 3.73592 6H20.2644C20.3922 6 20.4963 6.10171 20.5 6.2286ZM22 6.25648V17.25C22 18.4926 20.9926 19.5 19.75 19.5H4.25C3.00736 19.5 2 18.4926 2 17.25V6.23398C2 6.22371 2.00021 6.2135 2.00061 6.20333C2.01781 5.25971 2.78812 4.5 3.73592 4.5H20.2644C21.2229 4.5 22 5.27697 22.0001 6.23549C22.0001 6.24249 22.0001 6.24949 22 6.25648Z" fill="currentColor"></path></svg>',
+
+            'face-id' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3H7C5.89543 3 5 3.89543 5 5V7M15 3H17C18.1046 3 19 3.89543 19 5V7M9 21H7C5.89543 21 5 20.1046 5 19V17M15 21H17C18.1046 21 19 20.1046 19 19V17M9 10C9 10 9.5 11 12 11C14.5 11 15 10 15 10M9 14H9.01M15 14H15.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+
+            // HRD Icons
+            'hrd-employee' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.5 5.5C8.5 3.567 10.067 2 12 2C13.933 2 15.5 3.567 15.5 5.5C15.5 7.433 13.933 9 12 9C10.067 9 8.5 7.433 8.5 5.5ZM12 3.5C10.8954 3.5 10 4.39543 10 5.5C10 6.60457 10.8954 7.5 12 7.5C13.1046 7.5 14 6.60457 14 5.5C14 4.39543 13.1046 3.5 12 3.5ZM3.5 18C3.5 14.6863 6.18629 12 9.5 12H14.5C17.8137 12 20.5 14.6863 20.5 18V21.25C20.5 21.6642 20.1642 22 19.75 22H4.25C3.83579 22 3.5 21.6642 3.5 21.25V18ZM9.5 13.5C7.01472 13.5 5 15.5147 5 18V20.5H19V18C19 15.5147 16.9853 13.5 14.5 13.5H9.5Z" fill="currentColor"></path></svg>',
+
+            'hrd-payroll' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 6C3.25 4.75736 4.25736 3.75 5.5 3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V18C20.75 19.2426 19.7426 20.25 18.5 20.25H5.5C4.25736 20.25 3.25 19.2426 3.25 18V6ZM5.5 5.25C5.08579 5.25 4.75 5.58579 4.75 6V18C4.75 18.4142 5.08579 18.75 5.5 18.75H18.5C18.9142 18.75 19.25 18.4142 19.25 18V6C19.25 5.58579 18.9142 5.25 18.5 5.25H5.5ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V8.50182C13.7215 8.72209 14.5 9.54179 14.5 10.625C14.5 11.8676 13.4926 12.875 12.25 12.875H11.75C11.3358 12.875 11 13.2108 11 13.625C11 14.0392 11.3358 14.375 11.75 14.375H12.25C12.6642 14.375 13 14.0392 13 13.625H14.5C14.5 14.7426 13.7215 15.5279 12.75 15.7482V16C12.75 16.4142 12.4142 16.75 12 16.75C11.5858 16.75 11.25 16.4142 11.25 16V15.4982C10.2785 15.2779 9.5 14.4582 9.5 13.625C9.5 12.3824 10.5074 11.375 11.75 11.375H12.25C12.6642 11.375 13 11.0392 13 10.625C13 10.2108 12.6642 9.875 12.25 9.875H11.75C11.3358 9.875 11 10.2108 11 10.625H9.5C9.5 9.54179 10.2785 8.72209 11.25 8.50182V8C11.25 7.58579 11.5858 7.25 12 7.25Z" fill="currentColor"></path></svg>',
+
+            'hrd-attendance' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM7.25 5.25H5.5C5.08579 5.25 4.75 5.58579 4.75 6V8.25H19.25V6C19.25 5.58579 18.9142 5.25 18.5 5.25H16.75V6.25C16.75 6.66421 16.4142 7 16 7C15.5858 7 15.25 6.66421 15.25 6.25V5.25H8.75V6.25C8.75 6.66421 8.41421 7 8 7C7.58579 7 7.25 6.66421 7.25 6.25V5.25ZM19.25 9.75H4.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75ZM16.5303 12.4697C16.8232 12.7626 16.8232 13.2374 16.5303 13.5303L11.5303 18.5303C11.2374 18.8232 10.7626 18.8232 10.4697 18.5303L7.96967 16.0303C7.67678 15.7374 7.67678 15.2626 7.96967 14.9697C8.26256 14.6768 8.73744 14.6768 9.03033 14.9697L11 16.9393L15.4697 12.4697C15.7626 12.1768 16.2374 12.1768 16.5303 12.4697Z" fill="currentColor"></path></svg>',
+
+            'hrd-history' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12.75 7C12.75 6.58579 12.4142 6.25 12 6.25C11.5858 6.25 11.25 6.58579 11.25 7V12C11.25 12.2586 11.3791 12.5001 11.5937 12.6437L14.5937 14.6437C14.9412 14.8731 15.4071 14.775 15.6364 14.4275C15.8658 14.08 15.7677 13.6141 15.4202 13.3848L12.75 11.5986V7Z" fill="currentColor"></path></svg>',
         ];
 
         return $icons[$iconName] ?? '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>';
