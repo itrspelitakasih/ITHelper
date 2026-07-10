@@ -200,7 +200,9 @@ Route::middleware('auth')->group(function () {
             ->name('import.export');
     });
 
-    Route::get('/profile', fn () => view('pages.profile', ['title' => 'Profile']))->name('profile');
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 
