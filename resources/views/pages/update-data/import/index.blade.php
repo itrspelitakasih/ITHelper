@@ -146,8 +146,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10 shadow-[0_1px_0_0_rgba(229,231,235,1)] dark:shadow-[0_1px_0_0_rgba(31,41,55,1)]">
                                     <tr>
-                                        <th class="px-5 py-3 text-xs font-medium uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900">Kode</th>
-                                        <th class="px-5 py-3 text-xs font-medium uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900">Nama Perawatan</th>
+                                        <th class="px-5 py-3 text-xs font-medium uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900">Nama / Kode Perawatan</th>
                                         
                                         @if ($type === 'ralan' || $type === 'ranap')
                                             <th class="px-5 py-3 text-xs font-medium uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900">Jasa Sarana</th>
@@ -182,11 +181,13 @@
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @forelse ($records as $row)
                                         <tr class="hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors">
-                                            <td class="whitespace-nowrap px-5 py-3 text-sm font-semibold text-brand-600 dark:text-brand-400">
-                                                {{ $row->kd_jenis_prw }}
-                                            </td>
-                                            <td class="px-5 py-3 text-sm text-gray-900 dark:text-white max-w-[250px] truncate" title="{{ $row->nm_perawatan }}">
-                                                {{ $row->nm_perawatan }}
+                                            <td class="px-5 py-3 text-sm">
+                                                <span class="block text-xs font-semibold text-brand-600 dark:text-brand-400">
+                                                    {{ $row->kd_jenis_prw }}
+                                                </span>
+                                                <span class="block text-gray-900 dark:text-white font-medium max-w-[280px] truncate" title="{{ $row->nm_perawatan }}">
+                                                    {{ $row->nm_perawatan }}
+                                                </span>
                                             </td>
 
                                             @if ($type === 'ralan' || $type === 'ranap')
