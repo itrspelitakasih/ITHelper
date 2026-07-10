@@ -22,6 +22,7 @@
             <div class="flex flex-col gap-5">
                 <!-- Row 1: Compact Import Form -->
                 <form method="POST" action="{{ route('update-data.import.store', ['type' => $type]) }}" enctype="multipart/form-data" 
+                    onsubmit="return confirm('Apakah Anda yakin ingin memperbaharui data tarif dengan file yang diunggah?')"
                     class="flex flex-wrap items-center gap-4 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-150 dark:border-gray-800">
                     @csrf
                     <div class="flex-1 min-w-[280px]">
