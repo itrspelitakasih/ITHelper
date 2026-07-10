@@ -126,6 +126,7 @@ class ImportController extends Controller
             $records = $query->select($selects)
                 ->orderBy("{$tableName}.kd_jenis_prw")
                 ->paginate(30)
+                ->onEachSide(1)
                 ->withQueryString();
 
         } catch (Throwable $e) {
