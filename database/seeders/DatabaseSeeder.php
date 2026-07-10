@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = collect([
+        $permissionsData = collect([
             ['name' => 'Lihat Encounter', 'slug' => 'encounters.view', 'group' => 'SATUSEHAT'],
             ['name' => 'Kirim Encounter', 'slug' => 'encounters.send', 'group' => 'SATUSEHAT'],
             ['name' => 'Lihat Episode of Care', 'slug' => 'episode-of-care.view', 'group' => 'SATUSEHAT'],
@@ -49,15 +49,22 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Lihat Registrasi Rawat Jalan', 'slug' => 'rawat-jalan.registrasi.view', 'group' => 'Rawat Jalan'],
             ['name' => 'Lihat Registrasi IGD', 'slug' => 'rawat-jalan.igd.view', 'group' => 'Rawat Jalan'],
             ['name' => 'Lihat Laboratorium', 'slug' => 'laboratorium.view', 'group' => 'Pemeriksaan Penunjang'],
-            ['name' => 'Lihat WhatsApp', 'slug' => 'whatsapp.view', 'group' => 'WhatsApp'],
-            ['name' => 'Kirim WhatsApp', 'slug' => 'whatsapp.send', 'group' => 'WhatsApp'],
-            ['name' => 'Kelola WhatsApp', 'slug' => 'whatsapp.settings', 'group' => 'WhatsApp'],
             ['name' => 'Kelola Aplikasi', 'slug' => 'settings.app', 'group' => 'Pengaturan'],
             ['name' => 'Kelola Database Eksternal', 'slug' => 'settings.database', 'group' => 'Pengaturan'],
             ['name' => 'Kelola User', 'slug' => 'users.manage', 'group' => 'Pengaturan'],
             ['name' => 'Kelola Role', 'slug' => 'roles.manage', 'group' => 'Pengaturan'],
             ['name' => 'Import Database', 'slug' => 'update-data.import', 'group' => 'Update Data'],
-        ])->map(fn ($permission) => Permission::query()->updateOrCreate(
+        ]);
+
+        // Clean up deleted permissions (WhatsApp & Presensi)
+        Permission::query()->whereIn('slug', [
+            'whatsapp.view',
+            'whatsapp.send',
+            'whatsapp.settings',
+            'presensi.view',
+        ])->delete();
+
+        $permissions = $permissionsData->map(fn ($permission) => Permission::query()->updateOrCreate(
             ['slug' => $permission['slug']],
             $permission
         ));
