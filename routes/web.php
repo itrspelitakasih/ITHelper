@@ -187,6 +187,20 @@ Route::middleware('auth')->group(function () {
         Route::post('/referensi/paket/{id}/delete', [\App\Http\Controllers\Lis\LisReferensiController::class, 'deletePaketDetail'])->name('referensi.paket.delete');
     });
 
+    // Update Data routes
+    Route::prefix('update-data')->name('update-data.')->group(function () {
+        Route::get('/{type}', [\App\Http\Controllers\UpdateData\ImportController::class, 'index'])
+            ->whereIn('type', ['ralan', 'ranap', 'lab', 'radiology'])
+            ->name('import.index');
+        Route::post('/{type}', [\App\Http\Controllers\UpdateData\ImportController::class, 'store'])
+            ->whereIn('type', ['ralan', 'ranap', 'lab', 'radiology'])
+            ->name('import.store');
+        Route::get('/{type}/export', [\App\Http\Controllers\UpdateData\ImportController::class, 'export'])
+            ->whereIn('type', ['ralan', 'ranap', 'lab', 'radiology'])
+            ->name('import.export');
+    });
+
     Route::get('/profile', fn () => view('pages.profile', ['title' => 'Profile']))->name('profile');
 });
+
 

@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Kelola Database Eksternal', 'slug' => 'settings.database', 'group' => 'Pengaturan'],
             ['name' => 'Kelola User', 'slug' => 'users.manage', 'group' => 'Pengaturan'],
             ['name' => 'Kelola Role', 'slug' => 'roles.manage', 'group' => 'Pengaturan'],
+            ['name' => 'Import Database', 'slug' => 'update-data.import', 'group' => 'Update Data'],
         ])->map(fn ($permission) => Permission::query()->updateOrCreate(
             ['slug' => $permission['slug']],
             $permission

@@ -81,6 +81,36 @@ class MenuHelper
         ];
     }
 
+    public static function getUpdateDataNavItems()
+    {
+        return [
+            [
+                'icon' => 'forms',
+                'name' => 'Tarif Ralan',
+                'path' => '/update-data/ralan',
+                'permission' => 'update-data.import',
+            ],
+            [
+                'icon' => 'forms',
+                'name' => 'Tarif Ranap',
+                'path' => '/update-data/ranap',
+                'permission' => 'update-data.import',
+            ],
+            [
+                'icon' => 'forms',
+                'name' => 'Tarif Lab',
+                'path' => '/update-data/lab',
+                'permission' => 'update-data.import',
+            ],
+            [
+                'icon' => 'forms',
+                'name' => 'Tarif Radiologi',
+                'path' => '/update-data/radiology',
+                'permission' => 'update-data.import',
+            ],
+        ];
+    }
+
     public static function getMenuGroups()
     {
         $groups = [
@@ -91,6 +121,10 @@ class MenuHelper
             [
                 'title' => 'Bridging',
                 'items' => self::getBridgingNavItems()
+            ],
+            [
+                'title' => 'Update Data',
+                'items' => self::getUpdateDataNavItems()
             ],
             [
                 'title' => 'Others',
