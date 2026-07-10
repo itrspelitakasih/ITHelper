@@ -188,7 +188,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Update Data routes
-    Route::prefix('update-data')->name('update-data.')->group(function () {
+    Route::prefix('update-data')->name('update-data.')->middleware('permission:update-data.import')->group(function () {
         Route::get('/{type}', [\App\Http\Controllers\UpdateData\ImportController::class, 'index'])
             ->whereIn('type', ['ralan', 'ranap', 'lab', 'radiology'])
             ->name('import.index');
