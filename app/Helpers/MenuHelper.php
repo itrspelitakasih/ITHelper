@@ -86,27 +86,29 @@ class MenuHelper
         return [
             [
                 'icon' => 'forms',
-                'name' => 'Tarif Ralan',
-                'path' => '/update-data/ralan',
-                'permission' => 'update-data.import',
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Tarif Ranap',
-                'path' => '/update-data/ranap',
-                'permission' => 'update-data.import',
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Tarif Lab',
-                'path' => '/update-data/lab',
-                'permission' => 'update-data.import',
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Tarif Radiologi',
-                'path' => '/update-data/radiology',
-                'permission' => 'update-data.import',
+                'name' => 'Tarif',
+                'subItems' => [
+                    [
+                        'name' => 'Ralan',
+                        'path' => '/update-data/ralan',
+                        'permission' => 'update-data.import',
+                    ],
+                    [
+                        'name' => 'Ranap',
+                        'path' => '/update-data/ranap',
+                        'permission' => 'update-data.import',
+                    ],
+                    [
+                        'name' => 'Lab',
+                        'path' => '/update-data/lab',
+                        'permission' => 'update-data.import',
+                    ],
+                    [
+                        'name' => 'Radiologi',
+                        'path' => '/update-data/radiology',
+                        'permission' => 'update-data.import',
+                    ],
+                ],
             ],
         ];
     }
