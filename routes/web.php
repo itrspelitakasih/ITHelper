@@ -21,6 +21,7 @@ use App\Http\Controllers\ClinicalResourceController;
 use App\Http\Controllers\EpisodeOfCareController;
 use App\Http\Controllers\RawatJalanController;
 use App\Http\Controllers\LaboratoriumController;
+use App\Http\Controllers\LaporanController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/signin', [AuthController::class, 'create'])->name('login');
@@ -125,6 +126,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/rawat-jalan/igd', [RawatJalanController::class, 'igd'])
         ->middleware('permission:rawat-jalan.igd.view')
         ->name('rawat-jalan.igd.index');
+
+    Route::get('/laporan/kunjungan-ralan', [LaporanController::class, 'kunjunganRalan'])
+        ->middleware('permission:rawat-jalan.registrasi.view')
+        ->name('laporan.kunjungan-ralan');
+    Route::get('/laporan/kunjungan-ranap', [LaporanController::class, 'kunjunganRanap'])
+        ->middleware('permission:rawat-jalan.registrasi.view')
+        ->name('laporan.kunjungan-ranap');
+    Route::get('/laporan/detail-jm-dokter', [LaporanController::class, 'detailJMDokter'])
+        ->middleware('permission:rawat-jalan.registrasi.view')
+        ->name('laporan.detail-jm-dokter');
 
     Route::get('/laboratorium/{type}', [LaboratoriumController::class, 'index'])
         ->whereIn('type', ['permintaan', 'periksa', 'simrs'])

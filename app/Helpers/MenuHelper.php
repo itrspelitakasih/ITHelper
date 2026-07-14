@@ -27,6 +27,15 @@ class MenuHelper
                     ['name' => 'Laboratorium (SIMRS)', 'path' => '/laboratorium/permintaan', 'activePath' => '/laboratorium/permintaan*|/laboratorium/periksa*', 'permission' => 'laboratorium.view'],
                 ],
             ],
+            [
+                'icon' => 'charts',
+                'name' => 'Laporan',
+                'subItems' => [
+                    ['name' => 'Kunjungan Rawat Jalan', 'path' => '/laporan/kunjungan-ralan', 'permission' => 'rawat-jalan.registrasi.view'],
+                    ['name' => 'Kunjungan Rawat Inap', 'path' => '/laporan/kunjungan-ranap', 'permission' => 'rawat-jalan.registrasi.view'],
+                    ['name' => 'Tindakan Dokter', 'path' => '/laporan/detail-jm-dokter', 'permission' => 'rawat-jalan.registrasi.view'],
+                ],
+            ],
         ];
     }
 
