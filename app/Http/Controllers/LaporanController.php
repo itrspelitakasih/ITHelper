@@ -21,6 +21,7 @@ class LaporanController extends Controller
             'kd_poli' => ['nullable', 'string', 'max:50'],
             'kd_pj' => ['nullable', 'string', 'max:50'],
             'status_daftar' => ['nullable', 'string', 'in:Semua,Baru,Lama'],
+            'show_all' => ['nullable', 'boolean'],
         ]);
 
         $from = $filters['from'] ?? now()->toDateString();
@@ -29,6 +30,7 @@ class LaporanController extends Controller
         $kdPoli = $filters['kd_poli'] ?? '';
         $kdPj = $filters['kd_pj'] ?? '';
         $statusDaftar = $filters['status_daftar'] ?? 'Semua';
+        $showAll = $filters['show_all'] ?? false;
 
         $registrations = $this->emptyPaginator($request);
         $dokters = collect();
@@ -272,7 +274,7 @@ class LaporanController extends Controller
             ])
             ->orderBy('reg_periksa.tgl_registrasi')
             ->orderBy('reg_periksa.jam_reg')
-            ->paginate(50)
+            ->paginate($showAll ? 1000000 : 50)
             ->withQueryString();
 
             // Eager load diagnosis
@@ -305,7 +307,7 @@ class LaporanController extends Controller
             'penjabs' => $penjabs,
             'connectionError' => $connectionError,
             'stats' => $stats,
-            'filters' => compact('from', 'to', 'kdDokter', 'kdPoli', 'kdPj', 'statusDaftar'),
+            'filters' => compact('from', 'to', 'kdDokter', 'kdPoli', 'kdPj', 'statusDaftar', 'showAll'),
         ]);
     }
 
@@ -318,6 +320,7 @@ class LaporanController extends Controller
             'kd_bangsal' => ['nullable', 'string', 'max:50'],
             'kd_pj' => ['nullable', 'string', 'max:50'],
             'status_daftar' => ['nullable', 'string', 'in:Semua,Baru,Lama'],
+            'show_all' => ['nullable', 'boolean'],
         ]);
 
         $from = $filters['from'] ?? now()->toDateString();
@@ -326,6 +329,7 @@ class LaporanController extends Controller
         $kdBangsal = $filters['kd_bangsal'] ?? '';
         $kdPj = $filters['kd_pj'] ?? '';
         $statusDaftar = $filters['status_daftar'] ?? 'Semua';
+        $showAll = $filters['show_all'] ?? false;
 
         $registrations = $this->emptyPaginator($request);
         $dokters = collect();
@@ -608,7 +612,7 @@ class LaporanController extends Controller
             ])
             ->groupBy('reg_periksa.no_rawat')
             ->orderBy('reg_periksa.tgl_registrasi')
-            ->paginate(50)
+            ->paginate($showAll ? 1000000 : 50)
             ->withQueryString();
 
             // Eager load diagnosis & DPJP list
@@ -660,7 +664,7 @@ class LaporanController extends Controller
             'penjabs' => $penjabs,
             'connectionError' => $connectionError,
             'stats' => $stats,
-            'filters' => compact('from', 'to', 'kdDokter', 'kdBangsal', 'kdPj', 'statusDaftar'),
+            'filters' => compact('from', 'to', 'kdDokter', 'kdBangsal', 'kdPj', 'statusDaftar', 'showAll'),
         ]);
     }
 
@@ -672,6 +676,7 @@ class LaporanController extends Controller
             'kd_dokter' => ['nullable', 'string', 'max:50'],
             'kd_poli' => ['nullable', 'string', 'max:50'],
             'search' => ['nullable', 'string', 'max:100'],
+            'show_all' => ['nullable', 'boolean'],
         ]);
 
         $from = $filters['from'] ?? now()->toDateString();
@@ -679,6 +684,7 @@ class LaporanController extends Controller
         $kdDokter = $filters['kd_dokter'] ?? '';
         $kdPoli = $filters['kd_poli'] ?? '';
         $search = $filters['search'] ?? '';
+        $showAll = $filters['show_all'] ?? false;
 
         $transactions = $this->emptyPaginator($request);
         $dokters = collect();
@@ -910,7 +916,7 @@ class LaporanController extends Controller
 
             $transactions = $query->orderBy('tgl_perawatan')
                 ->orderBy('jam_rawat')
-                ->paginate(50)
+                ->paginate($showAll ? 1000000 : 50)
                 ->withQueryString();
 
         } catch (Throwable $exception) {
@@ -924,7 +930,7 @@ class LaporanController extends Controller
             'polis' => $polis,
             'connectionError' => $connectionError,
             'stats' => $stats,
-            'filters' => compact('from', 'to', 'kdDokter', 'kdPoli', 'search'),
+            'filters' => compact('from', 'to', 'kdDokter', 'kdPoli', 'search', 'showAll'),
         ]);
     }
 

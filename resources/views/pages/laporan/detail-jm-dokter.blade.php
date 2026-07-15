@@ -160,7 +160,15 @@
                         class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
                 </label>
 
-                <div class="flex items-end gap-2 lg:col-span-12">
+                <label class="lg:col-span-2">
+                    <span class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Tampilkan</span>
+                    <select name="show_all" class="h-11 w-full rounded-lg border border-gray-300 bg-white dark:bg-gray-850 px-3 text-sm text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                        <option value="" @selected(!$filters['showAll'])>50 Baris</option>
+                        <option value="1" @selected($filters['showAll'])>Semua</option>
+                    </select>
+                </label>
+
+                <div class="flex items-end gap-2 lg:col-span-10">
                     <button type="submit"
                         class="h-11 flex-1 rounded-lg bg-brand-500 px-4 text-sm font-medium text-white hover:bg-brand-600">
                         Terapkan
